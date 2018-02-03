@@ -65,6 +65,11 @@ int main(int argc, char *argv[])
 	rc = isShortBitSet(modified, 2);
 	printf("isShortBitSet: bit 2 in %d should  be set.  Function returned %d \n", modified, rc);
 
+    clearShortBit(2,&modified);
+
+    rc = isShortBitSet(2,modified);
+    printf("isShortBitSet: bit 2 in %d should not  be set.  Function returned %d \n", modified, rc);
+
 	test = 9;
 	rc = countBits(test);
 	printf("countBits: test = %d number of bits set to 1 should be 2.  Function returend: %d \n", test, rc);
@@ -140,6 +145,12 @@ void setShortBit(int bitNum, short* num) {
     *num = (*num | (1 << bitNum));
 
 }
+/////COMMENTS
+void clearShortBit(int bitNum, short* num) {
+
+    *num = (*num & ~(1<<bitNum));
+
+}
 
 /*************************************************************************************/
 
@@ -160,7 +171,11 @@ void setCharBit(int bitNum, char *c) {
 
     *c = (*c | (1 << bitNum));
 }
+////COMMENTS
+/*void clearCharBit(int bitNum, char *c) {
 
+    *c = (*c & ~(1<<bitNum));
+}*/
 /*************************************************************************************/
 
 
@@ -181,7 +196,13 @@ the numer of bits that are set to 1 in num
 int countBits(short num) {
 
     // add code
-    
+    int bitCount = 0;
+    for(int i = 0; i < 16; i++){
+        if(isShortBitSet(num,i) == 1){
+            bitCount++;
+        }
+    }
+    return bitCount;
 }
 
 
@@ -208,7 +229,7 @@ none
 void flipBitShort(int bitNum, short *num)
 
 {
-
+    *num = (*num^(1<<bitNum));
     // add code
 }
 
