@@ -163,10 +163,8 @@ this is the "inverse" of the function char2Short in the transmit program
 
 */
 
-
-void short2Char(short encodedNum, char *c)
-
-{
+//2462 3924 1284 3226 3900 1284 3084 1284 3314 3226 3134 3160 1284 3158 3084 3992
+void short2Char(short encodedNum, char *c) {
 	short mask = 0x0001;
 	int i;
 	int bitSet;
@@ -174,11 +172,44 @@ void short2Char(short encodedNum, char *c)
 	
 	*c = 0;		// initialize *c
  
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < 16; i++) {
 
 		// for each bit i do
 		// if the corrsponding bit in the encodedNum is set then set bit i at the char c
 		// for example if i == 0 then if bit 3 in encodedNum is set to 1 then set bit 0 in c to 1
+
+		bitSet = isShortBitSet(encodedNum,i);
+
+		if (!bitSet) continue;
+
+       switch(i) {
+		   case 3:
+			   setCharBit(0, c);
+			   break;
+		   case 5:
+			   setCharBit(1, c);
+			   break;
+		   case 6:
+			   setCharBit(2, c);
+			   break;
+		   case 7:
+			   setCharBit(3, c);
+			   break;
+		   case 9:
+			   setCharBit(4, c);
+			   break;
+		   case 10:
+			   setCharBit(5, c);
+			   break;
+		   case 11:
+			   setCharBit(6, c);
+			   break;
+		   case 12:
+			   setCharBit(7, c);
+			   break;
+		   default:
+			   break;
+	   }
 	}
 }
 
@@ -214,7 +245,8 @@ void correctCode(short *num)
 
 	// check parity bit p1
     // expose only the bits related to P1 using P1_MASK and count the number of bits that are set to 1
-
+	sum = countBits(*num & P1_MASK) + isShortBitSet(*num,1);
+	if(sum % 2 == 1)  bitNumber+= 1;
     // determine if parity bit P1 should have been set
 
 	// get the parity for P1_MASK that is stored in *num 
@@ -226,7 +258,8 @@ void correctCode(short *num)
 
 	// simlilary check parity bit p2
     // calculate the parity for P2 
-	
+	sum = countBits(*num & P2_MASK) + isShortBitSet(*num,2);
+	if(sum % 2 == 1)  bitNumber+= 2;
     
     // compare the calculated parity with the stored parity
 	
@@ -236,7 +269,8 @@ void correctCode(short *num)
 
 	// check parity bit p4
     // calculate the parity for P4
-	
+	sum = countBits(*num & P4_MASK) + isShortBitSet(*num,4);
+	if(sum % 2 == 1)  bitNumber+= 4;
     
     // compare the calculated parity with the stored parity
 	
@@ -248,7 +282,8 @@ void correctCode(short *num)
 
 	// check parity bit p8
     // calculate the parity for P8
-	
+	sum = countBits(*num & P8_MASK) + isShortBitSet(*num,8);
+	if(sum % 2 == 1)  bitNumber+= 8;
     
     // compare the calculated parity with the stored parity
 	
@@ -256,7 +291,7 @@ void correctCode(short *num)
 	// if the two parities are different add 2^3 to bitNumber
 
 
-
+	if(bitNumber != 0) flipBitShort(bitNumber,num);
     // if bitNumber != 0 then flip the bit at position bitNumber (use xor operator)
 }
 
