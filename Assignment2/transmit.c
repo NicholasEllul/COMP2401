@@ -191,13 +191,21 @@ int setParityBits(short *num)
 	int mask;
 	int sum;
 
+	/*
+	 #define P1_MASK 0xaa8// 0b0101010101000
+#define P2_MASK 0xcc8	 // 0b0110011001000
+#define P4_MASK 0x10e0	//  0b1000011100000
+#define P8_MASK 0x1e00  //  0b1111000000000
+	 */
 	// set parity bit P1
      
     // expose only the bits that are related to parity bit 1 using P1_MASK
 	// and count the number of bits that are set to 1
-    
-    
     // if the number of bits is odd then set parity bit P1
+	sum = countBits(*num & P1_MASK);
+	(sum % 2 == 1) ? setShortBit(1,num) : clearShortBit(1,num);
+    
+
 
 
 	// set parity bit P2
@@ -205,27 +213,26 @@ int setParityBits(short *num)
     // and count the number of bits that are set to 1  
 
     // if the number of bits is odd then set parity bit P2
-
+    sum = countBits(*num & P2_MASK);
+    (sum % 2 == 1) ? setShortBit(2,num) : clearShortBit(2,num);
 
 
 	// set parity bit P4
     // expose only the bits that are related to parity bit 1 using P4_MASK
 	// and count the number of bits that are set to 1
-    
-    
     // if the number of bits is odd then set parity bit P4
 
-	  
+    sum = countBits(*num & P4_MASK);
+    (sum % 2 == 1) ? setShortBit(4,num) : clearShortBit(4,num);
      
  	
     
     // set parity bit P8
      // expose only the bits that are related to parity bit 1 using P8_MASK
 	// and count the number of bits that are set to 1
-    
-    
     // if the number of bits is odd then set parity bit P8
-
+    sum = countBits(*num & P8_MASK);
+    (sum % 2 == 1) ? setShortBit(8,num) : clearShortBit(8,num);
 
 
 

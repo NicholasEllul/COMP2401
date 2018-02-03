@@ -26,4 +26,5 @@ int isShortBitSet(short num, int bitNum);
 void setShortBit(int bitNum, short *num);
 void flipBitShort(int bitNum, short *num);
 int countBits(short num);
+void clearShortBit(int bitNum, short* num);
 
