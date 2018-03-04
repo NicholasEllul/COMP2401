@@ -1,4 +1,3 @@
-
 /*
 
 File bit_manipulation.c
@@ -6,10 +5,9 @@ File bit_manipulation.c
 Purpose :
 contains helper functions for manipulating bits
 
-
 Revisions:
 a. Initial code - Doron Nussbaum
-
+b. Implemented functions - Nicholas Ellul - 101064168
 * /
 
 /************************************************************************/
@@ -79,8 +77,6 @@ int main(int argc, char *argv[])
    
 	return(0);
 }
-
-
 #endif
 
 /*************************************************************************************/
@@ -122,6 +118,7 @@ none
 int isShortBitSet(short num, int bitNum)
 {
     if(bitNum > 15 || bitNum < 0) return -1;
+
     return (num & (1<<bitNum))>>bitNum;
 }
 
@@ -145,7 +142,22 @@ void setShortBit(int bitNum, short* num) {
     *num = (*num | (1 << bitNum));
 
 }
-/////COMMENTS
+
+/*************************************************************************************/
+
+
+/* purpose: sets bit bitNum in *num to 0
+
+input:
+num - address of the short integer
+bitNum - the bit number to be checked
+
+output:
+*num - the modified short
+return:
+none
+
+*/
 void clearShortBit(int bitNum, short* num) {
 
     *num = (*num & ~(1<<bitNum));
@@ -167,15 +179,12 @@ return:
 none
 
 */
+
 void setCharBit(int bitNum, char *c) {
 
     *c = (*c | (1 << bitNum));
 }
-////COMMENTS
-/*void clearCharBit(int bitNum, char *c) {
 
-    *c = (*c & ~(1<<bitNum));
-}*/
 /*************************************************************************************/
 
 
@@ -190,8 +199,6 @@ none
 return:
 the numer of bits that are set to 1 in num
 
-
-
 */
 int countBits(short num) {
 
@@ -204,11 +211,6 @@ int countBits(short num) {
     }
     return bitCount;
 }
-
-
-
-
-
 
 /*************************************************************************************/
 
@@ -226,11 +228,8 @@ return:
 none
 
 */
-void flipBitShort(int bitNum, short *num)
-
-{
+void flipBitShort(int bitNum, short *num) {
     *num = (*num^(1<<bitNum));
-    // add code
 }
 
 
