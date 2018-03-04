@@ -13,7 +13,7 @@ As part of the simulation, the program also corrects any 1-bit errors in the rec
 
 Revision:
 a. Initial code - Doron Nussbaum
-
+b. Implemented Short2Char and CorrectCode functions - Nicholas Ellul - 101064168
 
 */
 
@@ -163,26 +163,23 @@ this is the "inverse" of the function char2Short in the transmit program
 
 */
 
-//2462 3924 1284 3226 3900 1284 3084 1284 3314 3226 3134 3160 1284 3158 3084 3992
 void short2Char(short encodedNum, char *c) {
 	short mask = 0x0001;
 	int i;
 	int bitSet;
 
-	
 	*c = 0;		// initialize *c
- 
-	for (i = 0; i < 16; i++) {
 
-		// for each bit i do
-		// if the corrsponding bit in the encodedNum is set then set bit i at the char c
-		// for example if i == 0 then if bit 3 in encodedNum is set to 1 then set bit 0 in c to 1
+    // Loop though bits of the short, and extract the bits which correspond to
+    // the bits of the char we want to represent
+    // We only loop though bit index 3 to 13 because we have no need to consider
+    // parity bits or any other unused bits
+	for (i = 3; i < 13; i++) {
 
-		bitSet = isShortBitSet(encodedNum,i);
+        bitSet = isShortBitSet(encodedNum,i);
+        if (!bitSet) continue;
 
-		if (!bitSet) continue;
-
-       switch(i) {
+        switch(i) {
 		   case 3:
 			   setCharBit(0, c);
 			   break;
@@ -218,11 +215,11 @@ void short2Char(short encodedNum, char *c) {
 
 
 /* purpose:
-performs error corrrections, if needed on the short integer
+performs error corrections, if needed on the short integer
 
-The function checks the parity bits for error and see if thre is a discrepancy between 
+The function checks the parity bits for error and see if there is a discrepancy between
 the transmitted parity bits and the computed parity bits for the received number.  
-If there is a decrepancy then it finds the bit number that was flipped.
+If there is a discrepancy then it finds the bit number that was flipped.
 
 If there is an error then it fixes it.
 
@@ -234,64 +231,28 @@ output:
 */
 
 
-void correctCode(short *num)
-
-{
-	int mask;
+void correctCode(short *num) {
 	int sum;
 	int bitNumber = 0; //  bit number with the error bit
-	int parity;		// a parity bit either 0 or 1
-	int storedParity; // the parity bit in the encoded char
 
-	// check parity bit p1
-    // expose only the bits related to P1 using P1_MASK and count the number of bits that are set to 1
+	// Check each parity bit for any discrepancies.
+	// If the sum of the parity bits and its dependencies
+	// are an odd number, add 2^n to the bit num where n is the index of the parity bit.
 	sum = countBits(*num & P1_MASK) + isShortBitSet(*num,1);
 	if(sum % 2 == 1)  bitNumber+= 1;
-    // determine if parity bit P1 should have been set
 
-	// get the parity for P1_MASK that is stored in *num 
-    
-    
-    // if the stored parity and newly computed parity are are different add 2^0 to bitNumber
-
-
-
-	// simlilary check parity bit p2
-    // calculate the parity for P2 
 	sum = countBits(*num & P2_MASK) + isShortBitSet(*num,2);
 	if(sum % 2 == 1)  bitNumber+= 2;
-    
-    // compare the calculated parity with the stored parity
-	
-        
-	// if the two parities are different add 2^1 to bitNumber
 
-
-	// check parity bit p4
-    // calculate the parity for P4
 	sum = countBits(*num & P4_MASK) + isShortBitSet(*num,4);
 	if(sum % 2 == 1)  bitNumber+= 4;
-    
-    // compare the calculated parity with the stored parity
-	
-        
-	// if the two parities are different add 2^2 to bitNumber
 
-
-
-
-	// check parity bit p8
-    // calculate the parity for P8
 	sum = countBits(*num & P8_MASK) + isShortBitSet(*num,8);
 	if(sum % 2 == 1)  bitNumber+= 8;
-    
-    // compare the calculated parity with the stored parity
-	
-        
-	// if the two parities are different add 2^3 to bitNumber
 
-
+	// If the parity bits showed a discrepancy, flip that bit.
+	// a bitNumber of 0 mean all the bits were correct.
+    printf("%d",bitNumber);
 	if(bitNumber != 0) flipBitShort(bitNumber,num);
-    // if bitNumber != 0 then flip the bit at position bitNumber (use xor operator)
 }
 
