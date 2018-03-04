@@ -6,12 +6,12 @@
 #include "patient.h"
 
 /********************************************************************/
+
 void printPatient(PersonRec person) {
     PatientRec patient = person.patient;
 
     // Generate string to hold the employees fullname
-    //int lengthOfString = strlen(person.firstName) + strlen(person.familyName) + 2;
-    char fullname[33];
+    char fullname[33]; // Buffer string to hold expected input (33 comes from the restriction provided in the assignment)
     sprintf(fullname,"%s %s", person.firstName, person.familyName);
 
     // Calculate the salary to date since the employee started
@@ -23,11 +23,11 @@ void printPatient(PersonRec person) {
 
 }
 
-/********************************************************************/
+// Takes in a list of people and the count of them. Then calls the print function
+// on those which are patients
 void printPatients(PersonRec *person, int numRecords) {
 
     printf("\nPatient List\n");
-    printf("-----------------------\n");
     for (int i = 0; i < numRecords; i++, person++) {
         if (person->emplyeeOrPatient == PATIENT_TYPE) {
             printPatient(*person);
@@ -36,24 +36,22 @@ void printPatients(PersonRec *person, int numRecords) {
     printf("-----------------------\n");
 }
 
+// Given a record of people, it prints stats about all the patients
 void printPatientOverallSummary (PersonRec *person,int numRecords){
-    PersonRec *startPosition = person;
 
     int totalPatients = 0;
     float totalDailyCostTotals = 0;
     float totalCostsToDate = 0;
 
-    for(int deptNum = 1; deptNum <= 6; deptNum++){
-        // Variables used to subtotal the data for each position
-        person = startPosition;
-        for(int j = 0; j < numRecords; j++,person++){
-            if(person ->emplyeeOrPatient == PATIENT_TYPE && person->patient.department == deptNum){
-                totalPatients++;
-                totalDailyCostTotals += person->patient.dailyCost;
-                totalCostsToDate += person->patient.dailyCost * person->patient.numDaysInHospital;
-            }
+    // Loop though the records and tally up patient data
+    for(int j = 0; j < numRecords; j++,person++){
+        if(person ->emplyeeOrPatient == PATIENT_TYPE){
+            totalPatients++;
+            totalDailyCostTotals += person->patient.dailyCost;
+            totalCostsToDate += person->patient.dailyCost * person->patient.numDaysInHospital;
         }
     }
+
     float averageCostPerPatent = 0;
     if(totalPatients > 0) averageCostPerPatent = totalDailyCostTotals/totalPatients;
 
@@ -61,10 +59,11 @@ void printPatientOverallSummary (PersonRec *person,int numRecords){
             totalPatients,totalCostsToDate, totalDailyCostTotals,averageCostPerPatent);
 }
 
+// Given a record of people, it prints stats about the patient data by department
 void printPatientDepartmentalSummary(PersonRec *person, int numRecords){
 
         PersonRec *startPosition = person;
-        for(int deptNum = 1; deptNum <= 6; deptNum++){
+        for(int deptNum = 1; deptNum <= MAX_DEPARTMENTS; deptNum++){
             // Variables used to subtotal the data for each position
 
             int numPatients=0;
@@ -88,6 +87,8 @@ void printPatientDepartmentalSummary(PersonRec *person, int numRecords){
 }
 
 /********************************************************************/
+// Takes in a record of people and the count then prints out the overall patient data,
+// then data by department
 void printPatientSummary(PersonRec *person, int numRecords)
 {
     printf("Patient Summary\n");
@@ -99,11 +100,12 @@ void printPatientSummary(PersonRec *person, int numRecords)
 
 
 /********************************************************************/
+// Takes in a record of people, the count, and a family name to search for
+// It then prints data about that patient who's family name is the passed in family name
 void searchPatient(PersonRec *person, int numRecords, char *familyName ) {
 
     // add code
     printf("\nPatient(s) with family name: %s\n",familyName);
-    printf("-----------------------\n");
     for (int i = 0; i < numRecords; i++, person++) {
         if (strcmp(person->familyName,familyName) == 0 && person->emplyeeOrPatient == PATIENT_TYPE) {
             printPatient(*person);

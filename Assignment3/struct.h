@@ -55,6 +55,7 @@ typedef struct employee {
 	unsigned char	 position : 2;			// position of employee in hospital;
 	unsigned short yearsService : 6;	// years of service
 	float salary;			// annual salary1
+
 } EmployeeRec;
 
 

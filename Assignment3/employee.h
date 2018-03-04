@@ -7,4 +7,6 @@
 // function prototypes
 
 void printEmployees(PersonRec *person, int numRecords);
-void printEmployeesSummary(PersonRec *person, int numRecords);
+void printEmployeesSummary(PersonRec *people, int numRecords);
+void printSummaryByPosition(PersonRec *people, int numRecords);
+void printEmployeeTotalSummary(PersonRec *people, int numRecords);

@@ -43,8 +43,8 @@ int menu(PersonRec *people,int numRecords){
 
         printf("\n(1) Print all employees\n");
         printf("(2) Print all patients\n");
-        printf("(3) Search patient using family name\n");
-        printf("(4) Summary of employees data\n");
+        printf("(3) Search patients by family name\n");
+        printf("(4) Summary of employee data\n");
         printf("(5) Summary of patient data\n");
         printf("(6) Size of structures (PersonRec, PatientRec, and EmployheeRec)\n");
         printf("(0) Quit  \n");
@@ -106,6 +106,7 @@ char promptQuit(){
         char choice;
         scanf(" %c", &choice);
 
+        // Check for uppercase or lowercase then flag variables
         if(choice == 'y' || choice == 'Y'){
             dontQuit = 0; // 0
             validInput = 1;

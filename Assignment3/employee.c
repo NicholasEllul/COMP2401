@@ -3,12 +3,13 @@
 #include "employee.h"
 #include "stdio.h"
 
+// Prints employee data of a PersonRec passed in
 void printEmployee(PersonRec person) {
     EmployeeRec emp = person.emp;
 
     // Generate string to hold the employees fullname
     //int lengthOfString = strlen(person.firstName) + strlen(person.familyName) + 2;
-    char fullname[33];
+    char fullname[33]; // Buffer to hold the full name
     sprintf(fullname,"%s %s", person.firstName, person.familyName);
 
     // Calculate the salary to date since the employee started
@@ -19,6 +20,9 @@ void printEmployee(PersonRec person) {
            fullname, emp.department,emp.salary,emp.position,emp.yearsService,salaryToDate);
 }
 
+
+// Takes in a list of people and the count of them. Then calls the print function
+// on those which are employees
 void printEmployees(PersonRec *person, int numRecords)
 {
     // Iterate though all records but only print the employee ones
@@ -33,53 +37,60 @@ void printEmployees(PersonRec *person, int numRecords)
 }
 
 
-void printEmployeesSummary(PersonRec *person, int numRecords)
-{
-    // add code
-    printf("\nEmployee Summary:\n");
-    printf("-----------------------\n");
-    PersonRec *startPosition = person;
+// Prints overall data encompassing all employees
+void printEmployeeTotalSummary(PersonRec *people, int numRecords){
 
-    // Indexes 0-3 of this array correspond to positions.
-    int numEmployees[4];
-    float salaries[4];
-
-    for(int posNum = 0; posNum < 4; posNum++){
-        // Variables used to subtotal the data for each position
-        person=startPosition;
-        numEmployees[posNum]=0;
-        salaries[posNum]=0;
-        for(int j = 0; j < numRecords; j++,person++){
-            if(person ->emplyeeOrPatient == EMPLOYEE_TYPE && person->emp.position == posNum){
-                numEmployees[posNum]++;
-                salaries[posNum] += person ->emp.salary;
-            }
+    // Loop though the employees tallying up the salary and number of employees
+    float totalSalary = 0.0f;
+    int numEmployees = 0;
+    for(int i = 0; i < numRecords; i++,people++){
+        if(people ->emplyeeOrPatient == EMPLOYEE_TYPE){
+            numEmployees ++;
+            totalSalary += people ->emp.salary;
         }
     }
 
-    // Tally Up Totals
-    float grandTotalSalary = 0;
-    int grandTotalEmployees = 0;
-    for(int i = 0; i < 4; i++){
-        grandTotalEmployees += numEmployees[i];
-        grandTotalSalary += salaries[i];
-    }
-
+    // Calculate average salary
     float grandAvgSalary = 0.0f;
-    if(grandTotalEmployees > 0) grandAvgSalary = grandTotalSalary/grandTotalEmployees;
+    if(numEmployees > 0) grandAvgSalary = totalSalary/numEmployees;
 
-    // Dorons instructions say to let the average salary have less digits than the salary but that makes no sense
-    // considering the average can also be 6 figures
     printf("Total number of employees:%2d total salary:%9.2f average salary: %9.2f\n",
-           grandTotalEmployees,grandTotalSalary,grandAvgSalary);
+           numEmployees,totalSalary,grandAvgSalary);
+}
 
-    // Tally Up Totals
-    for(int i = 0; i < 4; i++){
+// This function takes in people records and prints stats by each position
+void printSummaryByPosition(PersonRec *people, int numRecords){
+
+    // Used to reset the people pointer to the front of the the records each loop through
+    PersonRec * startPosition = people;
+
+    // Cycle though each position and print their stats
+    for(int posNum = 0; posNum < MAX_POSITIONS; posNum++){
+
+        float totalSalary = 0.0f;
+        int numEmployees = 0;
+        people = startPosition;
+        for(int i = 0; i < numRecords; i++,people++){
+            if(people ->emplyeeOrPatient == EMPLOYEE_TYPE && people->emp.position == posNum){
+                numEmployees ++;
+                totalSalary += people ->emp.salary;
+            }
+        }
+
         float avgSalary = 0.0f;
-        if(numEmployees[i] > 0) avgSalary = salaries[i]/numEmployees[i];
-        printf("Position[%d] - employees:%2d total salary:%9.2f average salary: %9.2f\n",
-                i,numEmployees[i],salaries[i],avgSalary);
-    }
+        if(numEmployees > 0) avgSalary = totalSalary/numEmployees;
 
+        printf("Position[%d] - employees:%2d total salary:%9.2f average salary: %9.2f\n",
+               posNum,numEmployees,totalSalary,avgSalary);
+    }
+}
+
+// Prints summary statistics of all the employees, then employees by position
+void printEmployeesSummary(PersonRec *people, int numRecords) {
+    // add code
+    printf("\nEmployee Summary:\n");
+    printEmployeeTotalSummary(people,numRecords); // Prints only the overall stats
+    printf("\nSummary By Position:\n");
+    printSummaryByPosition(people,numRecords); // Prints the stats for each department
     printf("-----------------------\n");
 }
