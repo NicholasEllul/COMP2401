@@ -1,3 +1,7 @@
+// Made by Nicholas Ellul 101064168
+// Made for COMP2401 A3
+// This file contains code for manipulating employee data
+
 #include <string.h>
 #include <printf.h>
 #include "employee.h"
@@ -69,7 +73,9 @@ void printSummaryByPosition(PersonRec *people, int numRecords){
 
         float totalSalary = 0.0f;
         int numEmployees = 0;
-        people = startPosition;
+        people = startPosition; // point pointer to front of people list
+
+        // Tally up subtotals for this position
         for(int i = 0; i < numRecords; i++,people++){
             if(people ->emplyeeOrPatient == EMPLOYEE_TYPE && people->emp.position == posNum){
                 numEmployees ++;

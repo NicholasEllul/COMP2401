@@ -1,4 +1,6 @@
-
+// Made by Nicholas Ellul 101064168
+// Made for COMP2401 A3
+// This file contains code for manipulating patient data
 
 #include <stdlib.h>
 #include "string.h"
@@ -11,7 +13,7 @@ void printPatient(PersonRec person) {
     PatientRec patient = person.patient;
 
     // Generate string to hold the employees fullname
-    char fullname[33]; // Buffer string to hold expected input (33 comes from the restriction provided in the assignment)
+    char fullname[33+1]; // Buffer string to hold expected input (33 comes from the restriction provided in the assignment)
     sprintf(fullname,"%s %s", person.firstName, person.familyName);
 
     // Calculate the salary to date since the employee started
@@ -52,6 +54,7 @@ void printPatientOverallSummary (PersonRec *person,int numRecords){
         }
     }
 
+    // calculate average cost
     float averageCostPerPatent = 0;
     if(totalPatients > 0) averageCostPerPatent = totalDailyCostTotals/totalPatients;
 
@@ -64,12 +67,13 @@ void printPatientDepartmentalSummary(PersonRec *person, int numRecords){
 
         PersonRec *startPosition = person;
         for(int deptNum = 1; deptNum <= MAX_DEPARTMENTS; deptNum++){
-            // Variables used to subtotal the data for each position
 
+            // Subtotaling variables
             int numPatients=0;
             float dailyCostTotal=0;
             float costToDate=0;
 
+            // Loop though patients in this department and tally up subtotals
             person = startPosition;
             for(int j = 0; j < numRecords; j++,person++){
                 if(person ->emplyeeOrPatient == PATIENT_TYPE && person->patient.department == deptNum){
@@ -79,8 +83,11 @@ void printPatientDepartmentalSummary(PersonRec *person, int numRecords){
                 }
             }
 
+            // Calculate average cost
             float avgDailyCostPerPatient = 0.0f;
             if(numPatients > 0) avgDailyCostPerPatient = dailyCostTotal/numPatients;
+
+            // Output
             printf("Department [%d] - patients: %3d cost to-date:%7.2f daily cost: %7.2f, average daily cost per patient:%7.2f\n",
             deptNum,numPatients,costToDate,dailyCostTotal,avgDailyCostPerPatient);
         }
@@ -96,15 +103,22 @@ void printPatientSummary(PersonRec *person, int numRecords)
 
     printf("Summary by Department\n");
     printPatientDepartmentalSummary(person,numRecords);
+    printf("-----------------------\n");
 }
 
 
 /********************************************************************/
 // Takes in a record of people, the count, and a family name to search for
 // It then prints data about that patient who's family name is the passed in family name
-void searchPatient(PersonRec *person, int numRecords, char *familyName ) {
+void searchPatient(PersonRec *person, int numRecords) {
 
     // add code
+    // Search patient using family name
+    printf(" What family name would you like to search? \n");
+    char familyName[100]; // Arbitrary Buffer size to hold family name
+    scanf(" %s", familyName);
+
+    // Loop though patients looking for the family name
     printf("\nPatient(s) with family name: %s\n",familyName);
     for (int i = 0; i < numRecords; i++, person++) {
         if (strcmp(person->familyName,familyName) == 0 && person->emplyeeOrPatient == PATIENT_TYPE) {
