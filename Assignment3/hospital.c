@@ -116,9 +116,9 @@ char promptQuit(){
 // This function prints the size of each struct
 void printSizeOfHospitalStructs(){
     printf("Size of structures\n");
-    printf("Size of PersonRrect = %lu\n", sizeof(PersonRec));
-    printf("Size of EmployeeRrect = %lu\n", sizeof(EmployeeRec));
-    printf("Size of PatientRrect = %lu\n", sizeof(PatientRec));
+    printf("Size of PersonRrect = %zu\n", sizeof(PersonRec));
+    printf("Size of EmployeeRrect = %zu\n", sizeof(EmployeeRec));
+    printf("Size of PatientRrect = %zu\n", sizeof(PatientRec));
     printf("-----------------------\n");
 }
 
