@@ -73,7 +73,10 @@ Issues and limitations:
         - The daily cost can be no more than 63 and no less than 0
         - The severity number can be no more than 3 and no less than 0
 
-    To change the limites on these restrictions, see bit fields and defines in struct.h
+    To change the limits on these restrictions, see bit fields and defines in struct.h
+
+    Issue:
+	The program will crash if letters are entered instead of numbers into the menu input field.
 
 How to use this software:
     To compile, navigate to the root directory and execute...
@@ -82,7 +85,7 @@ How to use this software:
 
     Followed by...
 
-        a.out
+        ./a.out
 
     Once the program begins to run you will be presented with a menu. This menu will
     describe the different interactions you may do and looks like this...
