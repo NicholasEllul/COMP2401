@@ -1,0 +1,9 @@
+singleMorph: isPrime singlePrime.c
+	gcc -o singleMorph singlePrime.c
+
+isPrime: isPrime.c
+	gcc -o isPrime isPrime.c
+
+
+clean:
+	rm singleMorph isPrime
